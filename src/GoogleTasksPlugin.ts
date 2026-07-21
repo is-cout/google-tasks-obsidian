@@ -25,6 +25,7 @@ const DEFAULT_SETTINGS: GoogleTasksSettings = {
 	askConfirmation: true,
 	refreshInterval: 60,
 	showNotice: true,
+	scheduleShowHeader: true,
 };
 
 export default class GoogleTasks extends Plugin {

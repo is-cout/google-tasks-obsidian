@@ -5,6 +5,7 @@ export interface GoogleTasksSettings {
 	askConfirmation: boolean;
 	refreshInterval: number;
 	showNotice: boolean;
+	scheduleShowHeader: boolean;
 }
 
 export interface TaskList {

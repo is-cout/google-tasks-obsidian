@@ -17,7 +17,14 @@
     // Refreshed on every poll so the overdue/today/future split stays current.
     let now = window.moment();
     // Eye toggle: collapse the weekday/date header (mirrors the calendar schedule view).
-    let showHeader = true;
+    // Persisted so the choice survives reopening the view.
+    let showHeader = plugin.settings.scheduleShowHeader ?? true;
+
+    const toggleHeader = () => {
+        showHeader = !showHeader;
+        plugin.settings.scheduleShowHeader = showHeader;
+        plugin.saveSettings();
+    };
 
     type Bucket = { key: string; label: string; tone: "overdue" | "today" | "future" | "none"; tasks: Task[] };
 
@@ -97,7 +104,7 @@
     <button
         class="gtask-icon-btn gtask-schedule-eye"
         aria-label={showHeader ? "Hide date header" : "Show date header"}
-        on:click={() => (showHeader = !showHeader)}
+        on:click={toggleHeader}
     >
         {#if showHeader}
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8Z"/><circle cx="12" cy="12" r="3"/></svg>
