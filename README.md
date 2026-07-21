@@ -9,6 +9,7 @@ Manage your Google Tasks from inside Obsidian
 ## Features
 
 -   List tasks
+-   Tasks Schedule view — agenda of open tasks bucketed by day (Overdue / Today / Tomorrow / upcoming), with status dots and inline complete/edit
 -   Create tasks
 -   Edit tasks (Will create a new task and delete the old one)
 -   Mark as done / todo

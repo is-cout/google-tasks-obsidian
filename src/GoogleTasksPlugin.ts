@@ -8,6 +8,7 @@ import {
 } from "./googleApi/GoogleCompleteTask";
 import { CreateTaskModal } from "./modal/CreateTaskModal";
 import { GoogleTaskView, VIEW_TYPE_GOOGLE_TASK } from "./view/GoogleTaskView";
+import { ScheduleTasksView, VIEW_TYPE_GOOGLE_TASK_SCHEDULE } from "./view/ScheduleTasksView";
 import { TaskListModal } from "./modal/TaskListModal";
 import {
 	GoogleTasksSettingTab,
@@ -42,6 +43,22 @@ export default class GoogleTasks extends Plugin {
 		}
 		this.app.workspace.revealLeaf(
 			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK).first()
+		);
+	};
+
+	initScheduleView = async () => {
+		if (
+			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
+				.length === 0
+		) {
+			await this.app.workspace.getRightLeaf(false).setViewState({
+				type: VIEW_TYPE_GOOGLE_TASK_SCHEDULE,
+			});
+		}
+		this.app.workspace.revealLeaf(
+			this.app.workspace
+				.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
+				.first()
 		);
 	};
 
@@ -100,11 +117,24 @@ export default class GoogleTasks extends Plugin {
 			(leaf: WorkspaceLeaf) => new GoogleTaskView(leaf, this)
 		);
 
+		this.registerView(
+			VIEW_TYPE_GOOGLE_TASK_SCHEDULE,
+			(leaf: WorkspaceLeaf) => new ScheduleTasksView(leaf, this)
+		);
+
 		this.addRibbonIcon(
 			"check-in-circle",
 			"Google Tasks",
 			(evt: MouseEvent) => {
 				this.initView();
+			}
+		);
+
+		this.addRibbonIcon(
+			"layout-list",
+			"Tasks Schedule",
+			(evt: MouseEvent) => {
+				this.initScheduleView();
 			}
 		);
 
@@ -275,12 +305,29 @@ export default class GoogleTasks extends Plugin {
 			},
 		});
 
+		//Open the schedule view command
+		this.addCommand({
+			id: "open-google-tasks-schedule",
+			name: "Open Tasks Schedule View",
+			checkCallback: (checking: boolean) => {
+				const canRun = settingsAreCompleteAndLoggedIn(this, false);
+				if (checking) {
+					return canRun;
+				}
+				if (!canRun) {
+					return;
+				}
+				this.initScheduleView();
+			},
+		});
+
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new GoogleTasksSettingTab(this.app, this));
 	}
 
 	onunload() {
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_GOOGLE_TASK);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE);
 		this.app.vault.offref(this.openEvent);
 	}
 

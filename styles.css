@@ -199,3 +199,138 @@ input[type="date"] {
 .googleTaskOverDue {
 	color: red;
 }
+
+/* ===== Tasks Schedule View ===== */
+
+.gtask-schedule-container {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 4px 2px;
+}
+
+.gtask-schedule-header {
+	margin-bottom: 4px;
+}
+
+.gtask-schedule-weekday {
+	margin: 0;
+	text-transform: capitalize;
+	color: var(--text-muted);
+	font-weight: 500;
+}
+
+.gtask-schedule-date {
+	margin: 0;
+	cursor: pointer;
+}
+
+.gtask-schedule-empty {
+	color: var(--text-muted);
+}
+
+.gtask-schedule-section {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.gtask-schedule-section-title {
+	margin: 8px 0 2px;
+	font-weight: 600;
+}
+
+.gtask-tone-overdue {
+	color: var(--color-red, #ff4136);
+}
+
+.gtask-tone-today {
+	color: var(--color-green, #2ecc40);
+}
+
+.gtask-schedule-card {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 8px;
+	border-left: 4px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 8px 22px 8px 10px;
+	background-color: var(--background-secondary);
+}
+
+.gtask-schedule-check {
+	margin-top: 2px;
+	flex-shrink: 0;
+	cursor: pointer;
+}
+
+.gtask-schedule-body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+	cursor: pointer;
+	flex: 1 1 auto;
+}
+
+.gtask-schedule-title {
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.gtask-schedule-notes {
+	font-size: 0.8rem;
+	color: var(--text-muted);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.gtask-schedule-meta {
+	display: flex;
+	gap: 8px;
+	font-size: 0.75rem;
+	color: var(--text-faint);
+}
+
+.gtask-schedule-dot {
+	position: absolute;
+	top: 10px;
+	right: 8px;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+}
+
+.gtask-dot-overdue {
+	background-color: var(--color-red, #ff4136);
+}
+
+.gtask-dot-today {
+	background-color: var(--color-green, #2ecc40);
+}
+
+.gtask-dot-future {
+	background-color: var(--text-faint);
+}
+
+.gtask-dot-none {
+	background-color: transparent;
+}
+
+.gtask-schedule-children {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-left: 22px;
+}
+
+.gtask-schedule-child {
+	align-items: center;
+	padding: 4px 10px;
+	font-size: 0.9em;
+	background-color: var(--background-primary-alt);
+}
