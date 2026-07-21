@@ -1,11 +1,11 @@
 {
 	"name": "google-tasks",
-	"version": "1.5.2",
+	"version": "1.6.0",
 	"description": "This is a plugin for Obsidian to interact with your google tasks",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
-		"build": "node esbuild.config.mjs production",
+		"build": "node esbuild.config.mjs production && node scripts/copy-to-vault.mjs",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
