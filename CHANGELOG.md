@@ -12,6 +12,10 @@ Running log of what this fork diverged from upstream `obsidian-google-tasks`.
   Files: `src/svelte/ScheduleTasksComp.svelte`, `src/view/ScheduleTasksView.ts`,
   `src/GoogleTasksPlugin.ts`, `styles.css`. Why: a cleaner chronological overview
   alongside the existing list view, mirroring the calendar plugin's schedule view.
+- fix: editing a task's due date now persists — `UpdateGoogleTask` sends an RFC 3339
+  timestamp instead of the raw `YYYY-MM-DD` the date input yields, which the Google
+  Tasks API silently ignored. Also refresh the schedule view after create/update so
+  changes show up immediately instead of on the next poll.
 - chore: `npm run build` now copies `main.js` / `manifest.json` / `styles.css` straight
   into the Obsidian vault plugin folder via `scripts/copy-to-vault.mjs`, using the
   `OBSIDIAN_PLUGIN_DIR` set in a gitignored `.env.local`. Why: faster local iteration.

@@ -203,22 +203,30 @@ input[type="date"] {
 /* ===== Tasks Schedule View ===== */
 
 .gtask-schedule-container {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 	padding: 4px 2px;
 }
 
-.gtask-schedule-header {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 8px;
-	margin-bottom: 4px;
+/* Eye toggle sits pinned in the top-right corner, out of the content flow, so
+   collapsing the header leaves no empty band above the first task section. */
+.gtask-schedule-eye {
+	position: absolute;
+	top: 0;
+	right: 2px;
+	z-index: 1;
 }
 
-.gtask-schedule-headings {
-	min-width: 0;
+/* When the header is hidden, leave just enough top room for the eye button. */
+.gtask-header-hidden {
+	padding-top: 2px;
+}
+
+.gtask-schedule-header {
+	margin-bottom: 4px;
+	padding-right: 28px;
 }
 
 .gtask-icon-btn {

@@ -28,8 +28,10 @@ export async function UpdateGoogleTask(
 				body: JSON.stringify({
                     "title":task.title,
                     "notes": task.notes ?? "",
-                    "due": task.due,
-                    "updated": new Date().toDateString()
+                    // The Google Tasks API only accepts an RFC 3339 timestamp for `due`;
+                    // a bare "YYYY-MM-DD" (what the date input yields) is silently ignored.
+                    "due": task.due ? new Date(task.due).toISOString() : null,
+                    "updated": new Date().toISOString()
                 }),
 			}
 		);
@@ -45,8 +47,9 @@ export async function UpdateGoogleTask(
                         leaf.view.onOpen();
                     }
                 });
+            plugin.refreshScheduleViews();
         }
-        
+
 	} catch (error) {
         console.log(error)
 		createNotice(plugin, "Could not update task");

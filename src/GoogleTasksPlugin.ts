@@ -46,6 +46,19 @@ export default class GoogleTasks extends Plugin {
 		);
 	};
 
+	// Nudge any open schedule view to refetch. Task mutations (create/update/complete/
+	// delete) happen from modals that only know about the legacy list view, so this keeps
+	// the schedule view in sync right away instead of waiting for its poll interval.
+	refreshScheduleViews = () => {
+		this.app.workspace
+			.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
+			.forEach((leaf) => {
+				if (leaf.view instanceof ScheduleTasksView) {
+					leaf.view.schedule?.refresh();
+				}
+			});
+	};
+
 	initScheduleView = async () => {
 		if (
 			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)

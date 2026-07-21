@@ -49,6 +49,7 @@ export async function CreateGoogleTask(
 						leaf.view.loadTaskView();
 					}
 				});
+			plugin.refreshScheduleViews();
 			return task;
 		}
 	} catch (error) {
@@ -95,6 +96,7 @@ export async function CreateGoogleTaskFromOldTask(
 						leaf.view.onOpen();
 					}
 				});
+			plugin.refreshScheduleViews();
 		}
 	} catch (error) {
 		console.error(error);
