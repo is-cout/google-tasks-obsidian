@@ -210,7 +210,32 @@ input[type="date"] {
 }
 
 .gtask-schedule-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 8px;
 	margin-bottom: 4px;
+}
+
+.gtask-schedule-headings {
+	min-width: 0;
+}
+
+.gtask-icon-btn {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.gtask-icon-btn:hover {
+	color: var(--text-normal);
 }
 
 .gtask-schedule-weekday {

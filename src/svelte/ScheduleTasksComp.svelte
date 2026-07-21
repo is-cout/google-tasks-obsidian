@@ -16,6 +16,8 @@
     let interval: number;
     // Refreshed on every poll so the overdue/today/future split stays current.
     let now = window.moment();
+    // Eye toggle: collapse the weekday/date header (mirrors the calendar schedule view).
+    let showHeader = true;
 
     type Bucket = { key: string; label: string; tone: "overdue" | "today" | "future" | "none"; tasks: Task[] };
 
@@ -93,13 +95,28 @@
 
 <div class="gtask-schedule-container">
     <div class="gtask-schedule-header">
-        <h3 class="gtask-schedule-weekday">{now.format("dddd")}</h3>
-        <h1
-            class="gtask-schedule-date"
-            on:click={refresh}
-            on:keypress={refresh}
-            aria-label="Refresh"
-        >{now.format("MMMM DD, YYYY")}</h1>
+        {#if showHeader}
+            <div class="gtask-schedule-headings">
+                <h3 class="gtask-schedule-weekday">{now.format("dddd")}</h3>
+                <h1
+                    class="gtask-schedule-date"
+                    on:click={refresh}
+                    on:keypress={refresh}
+                    aria-label="Refresh"
+                >{now.format("MMMM DD, YYYY")}</h1>
+            </div>
+        {/if}
+        <button
+            class="gtask-icon-btn"
+            aria-label={showHeader ? "Hide date header" : "Show date header"}
+            on:click={() => (showHeader = !showHeader)}
+        >
+            {#if showHeader}
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.53 13.53 0 0 0 2 12s3 8 10 8a9.74 9.74 0 0 0 5.39-1.61"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            {:else}
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+            {/if}
+        </button>
     </div>
 
     {#if !loggedIn}

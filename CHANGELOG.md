@@ -7,7 +7,8 @@ Running log of what this fork diverged from upstream `obsidian-google-tasks`.
 - feat: add "Tasks Schedule" view — an agenda of open tasks bucketed by day
   (Overdue / Today / Tomorrow / upcoming days / No due date) with status dots
   (red = overdue, green = today, gray = future), checkbox to complete, and click to
-  edit. Opened via its own ribbon icon or the "Open Tasks Schedule View" command.
+  edit. An eye toggle in the header collapses the weekday/date heading. Opened via
+  its own ribbon icon or the "Open Tasks Schedule View" command.
   Files: `src/svelte/ScheduleTasksComp.svelte`, `src/view/ScheduleTasksView.ts`,
   `src/GoogleTasksPlugin.ts`, `styles.css`. Why: a cleaner chronological overview
   alongside the existing list view, mirroring the calendar plugin's schedule view.
