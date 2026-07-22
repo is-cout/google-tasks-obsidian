@@ -1,7 +1,6 @@
 import { FuzzySuggestModal, moment } from "obsidian";
 import { GoogleCompleteTask } from "../googleApi/GoogleCompleteTask";
 import type GoogleTasks from "../GoogleTasksPlugin";
-import { GoogleTaskView, VIEW_TYPE_GOOGLE_TASK } from "../view/GoogleTaskView";
 import type { Task } from "../helper/types";
 
 export class TaskListModal extends FuzzySuggestModal<Task> {
@@ -32,14 +31,6 @@ export class TaskListModal extends FuzzySuggestModal<Task> {
 		const gotUpdated = await GoogleCompleteTask(this.plugin, item);
 		if (!gotUpdated) return;
 
-		this.app.workspace
-			.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK)
-			.forEach((leaf) => {
-				if (leaf.view instanceof GoogleTaskView) {
-					leaf.view.removeTodo(item);
-					leaf.view.addDone(item);
-					leaf.view.loadTaskView();
-				}
-			});
+		this.plugin.refreshScheduleViews();
 	}
 }

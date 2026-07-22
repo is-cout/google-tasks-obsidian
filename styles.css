@@ -210,28 +210,30 @@ input[type="date"] {
 	padding: 4px 2px;
 }
 
-/* Eye toggle sits pinned in the top-right corner, out of the content flow, so
+/* Toolbar sits pinned in the top-right corner, out of the content flow, so
    collapsing the header leaves no empty band above the first task section. */
-.gtask-schedule-eye {
+.gtask-schedule-toolbar {
 	position: absolute;
 	top: 0;
 	right: 2px;
 	z-index: 1;
+	display: flex;
+	align-items: center;
+	gap: 2px;
 }
 
-/* When the header is hidden, leave just enough top room for the eye button. */
+/* When the header is hidden, leave just enough top room for the toolbar. */
 .gtask-header-hidden {
 	padding-top: 2px;
 }
 
 .gtask-schedule-header {
 	margin-bottom: 4px;
-	padding-right: 28px;
+	padding-right: 84px;
 }
 
 .gtask-icon-btn {
 	flex-shrink: 0;
-	margin-left: auto;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -251,6 +253,21 @@ input[type="date"] {
 	color: var(--text-normal);
 	background: transparent !important;
 	box-shadow: none !important;
+}
+
+/* Active state marks that the view is currently including completed tasks.
+   Declared after the hover rule so hovering an active button keeps the accent. */
+.gtask-icon-btn.gtask-icon-btn-active,
+.gtask-icon-btn.gtask-icon-btn-active:hover,
+.gtask-icon-btn.gtask-icon-btn-active:focus,
+.gtask-icon-btn.gtask-icon-btn-active:focus-visible {
+	color: var(--text-accent);
+}
+
+/* Completed tasks stay readable but visibly settled. */
+.gtask-schedule-done .gtask-schedule-title {
+	text-decoration: line-through;
+	color: var(--text-muted);
 }
 
 .gtask-schedule-weekday {

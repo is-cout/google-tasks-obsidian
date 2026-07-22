@@ -7,7 +7,6 @@ import {
 	GoogleUnCompleteTaskById,
 } from "./googleApi/GoogleCompleteTask";
 import { CreateTaskModal } from "./modal/CreateTaskModal";
-import { GoogleTaskView, VIEW_TYPE_GOOGLE_TASK } from "./view/GoogleTaskView";
 import { ScheduleTasksView, VIEW_TYPE_GOOGLE_TASK_SCHEDULE } from "./view/ScheduleTasksView";
 import { TaskListModal } from "./modal/TaskListModal";
 import {
@@ -33,20 +32,6 @@ export default class GoogleTasks extends Plugin {
 	plugin: GoogleTasks;
 	showHidden = false;
 	openEvent: null;
-	initView = async () => {
-		if (
-			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK).length ===
-			0
-		) {
-			await this.app.workspace.getRightLeaf(false).setViewState({
-				type: VIEW_TYPE_GOOGLE_TASK,
-			});
-		}
-		this.app.workspace.revealLeaf(
-			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK).first()
-		);
-	};
-
 	// Nudge any open schedule view to refetch. Task mutations (create/update/complete/
 	// delete) happen from modals that only know about the legacy list view, so this keeps
 	// the schedule view in sync right away instead of waiting for its poll interval.
@@ -60,20 +45,35 @@ export default class GoogleTasks extends Plugin {
 			});
 	};
 
-	initScheduleView = async () => {
-		if (
-			this.app.workspace.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
-				.length === 0
-		) {
-			await this.app.workspace.getRightLeaf(false).setViewState({
+	// Refresh interval lives per open schedule view, so a settings change has to
+	// reach each one instead of being picked up on the next reopen.
+	restartScheduleViewIntervals = () => {
+		this.app.workspace
+			.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
+			.forEach((leaf) => {
+				if (leaf.view instanceof ScheduleTasksView) {
+					leaf.view.schedule?.restartInterval();
+				}
+			});
+	};
+
+	// Several schedule views can coexist (each on its own task lists), so `forceNew`
+	// always splits off a fresh leaf instead of revealing the one already open.
+	initScheduleView = async (forceNew = false) => {
+		const existing = this.app.workspace.getLeavesOfType(
+			VIEW_TYPE_GOOGLE_TASK_SCHEDULE
+		);
+
+		if (forceNew || existing.length === 0) {
+			const leaf = this.app.workspace.getRightLeaf(forceNew);
+			await leaf.setViewState({
 				type: VIEW_TYPE_GOOGLE_TASK_SCHEDULE,
 			});
+			this.app.workspace.revealLeaf(leaf);
+			return;
 		}
-		this.app.workspace.revealLeaf(
-			this.app.workspace
-				.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE)
-				.first()
-		);
+
+		this.app.workspace.revealLeaf(existing.first());
 	};
 
 	onLayoutReady = async() => {
@@ -127,28 +127,16 @@ export default class GoogleTasks extends Plugin {
 		this.app.workspace.onLayoutReady(this.onLayoutReady);
 
 		this.registerView(
-			VIEW_TYPE_GOOGLE_TASK,
-			(leaf: WorkspaceLeaf) => new GoogleTaskView(leaf, this)
-		);
-
-		this.registerView(
 			VIEW_TYPE_GOOGLE_TASK_SCHEDULE,
 			(leaf: WorkspaceLeaf) => new ScheduleTasksView(leaf, this)
 		);
 
 		this.addRibbonIcon(
 			"check-in-circle",
-			"Google Tasks",
-			(evt: MouseEvent) => {
-				this.initView();
-			}
-		);
-
-		this.addRibbonIcon(
-			"layout-list",
 			"Tasks Schedule",
 			(evt: MouseEvent) => {
-				this.initScheduleView();
+				// Ctrl/Cmd-click opens an additional schedule view next to the existing one.
+				this.initScheduleView(evt.ctrlKey || evt.metaKey);
 			}
 		);
 
@@ -335,12 +323,27 @@ export default class GoogleTasks extends Plugin {
 			},
 		});
 
+		//Open an additional schedule view, so two lists can be watched side by side
+		this.addCommand({
+			id: "open-new-google-tasks-schedule",
+			name: "Open New Tasks Schedule View",
+			checkCallback: (checking: boolean) => {
+				const canRun = settingsAreCompleteAndLoggedIn(this, false);
+				if (checking) {
+					return canRun;
+				}
+				if (!canRun) {
+					return;
+				}
+				this.initScheduleView(true);
+			},
+		});
+
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new GoogleTasksSettingTab(this.app, this));
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_GOOGLE_TASK);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_GOOGLE_TASK_SCHEDULE);
 		this.app.vault.offref(this.openEvent);
 	}

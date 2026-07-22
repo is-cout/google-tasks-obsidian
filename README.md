@@ -8,8 +8,9 @@ Manage your Google Tasks from inside Obsidian
 
 ## Features
 
--   List tasks
--   Tasks Schedule view — agenda of open tasks bucketed by day (Overdue / Today / Tomorrow / upcoming), with status dots and inline complete/edit
+-   Tasks Schedule view — agenda of tasks bucketed by day (Overdue / Today / Tomorrow / upcoming), with status dots and inline complete/edit
+-   Pick which task lists a schedule view shows, and open several schedule views with different lists
+-   Show or hide completed tasks per schedule view
 -   Create tasks
 -   Edit tasks (Will create a new task and delete the old one)
 -   Mark as done / todo
@@ -46,17 +47,21 @@ Manage your Google Tasks from inside Obsidian
 
 ## Usage
 
-### Google Task View
+### Tasks Schedule View
 
--   Open view by pressing the checkmark icon in the left sidebar
--   View will open and list your tasks
-    -   Complete them by clicking the checkbox
-    -   Edit them by long clicking the task
-    -   Show and hide the todo and done list by pressing the title texts
-    -   Force update the list by pressing on Google Tasks
-    -   The list will check for changes in a set interval (changeable in settings)
-    -   Press the plus button to create a new task
-    -   Use the dropdown to switch between lists
+-   Open view by pressing the checkmark icon in the left sidebar, or with the `Open Tasks Schedule View` command
+-   Tasks are grouped by day: Overdue, Today, Tomorrow, upcoming days, No due date
+    -   Complete (or reopen) a task by clicking the checkbox
+    -   Edit a task by clicking it
+    -   Force update by clicking the date heading
+    -   The view checks for changes in a set interval (changeable in settings)
+-   Toolbar in the top-right corner:
+    -   Checklist — show or hide completed tasks (accent-colored while they are shown)
+    -   Gear — choose which task lists this view shows (no selection = all lists)
+    -   Eye — collapse the weekday/date heading
+-   List choice and the completed toggle are saved per view, so you can open several
+    schedule views side by side, each on its own task lists. Open an extra one with
+    the `Open New Tasks Schedule View` command, or Ctrl/Cmd-click the ribbon icon
 
 ### Commands
 

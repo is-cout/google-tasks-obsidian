@@ -10,7 +10,6 @@ import {
 import { customSetting } from "../helper/CustomSettingElement";
 import { LoginGoogle } from "../googleApi/GoogleAuth";
 import type GoogleTasks from "../GoogleTasksPlugin";
-import { GoogleTaskView, VIEW_TYPE_GOOGLE_TASK } from "./GoogleTaskView";
 import { getRT, setAT, setET, setRT } from "../helper/LocalStorage";
 
 export class GoogleTasksSettingTab extends PluginSettingTab {
@@ -162,14 +161,8 @@ export class GoogleTasksSettingTab extends PluginSettingTab {
 			this.plugin.settings.refreshInterval = parseInt(
 				RefreshIntervalInput.value
 			);
-			this.app.workspace
-				.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK)
-				.forEach((leaf) => {
-					if (leaf.view instanceof GoogleTaskView) {
-						leaf.view.setRefreshInterval();
-					}
-				});
 			await this.plugin.saveSettings();
+			this.plugin.restartScheduleViewIntervals();
 		});
 	}
 }

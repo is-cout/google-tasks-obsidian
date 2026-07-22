@@ -2,6 +2,33 @@
 
 Running log of what this fork diverged from upstream `obsidian-google-tasks`.
 
+## 2.0.0 — 2026-07-22
+
+- **breaking**: removed the legacy "Google Tasks" list view and its ribbon icon. The
+  Tasks Schedule view is now the only view, and it inherits the old view's checkmark
+  icon (`check-in-circle`). Existing "googleTaskView" leaves in a saved workspace no
+  longer open. Files: deleted `src/view/GoogleTaskView.ts`, added
+  `src/helper/TaskListId.ts` (kept `getListId`), `src/GoogleTasksPlugin.ts`,
+  `src/view/GoogleTasksSettingTab.ts`, `src/modal/TaskListModal.ts`,
+  `src/modal/UpdateTaskModal.ts`, `src/googleApi/GoogleCreateTask.ts`,
+  `src/googleApi/GoogleUpdateTask.ts`. Why: two overlapping views to maintain, only
+  the schedule one is used.
+- feat: task list filter per schedule view — gear button in the view toolbar opens a
+  checkable menu of Google task lists (none checked = all lists). The choice is stored
+  in the leaf's view state, so several schedule views can be open at once, each on its
+  own lists, and the selection survives a restart.
+- feat: show/hide completed tasks per schedule view — leftmost checklist button in the
+  toolbar, accent-colored while completed tasks are shown (as in the calendar plugin) so
+  the current state is visible at a glance. Completed tasks render struck through and
+  their checkbox reopens them.
+- feat: `Open New Tasks Schedule View` command (and Ctrl/Cmd-click on the ribbon icon)
+  opens an additional schedule view instead of revealing the one already open — the
+  plain ribbon click still reveals the existing one.
+  Files: `src/svelte/ScheduleTasksComp.svelte`, `src/view/ScheduleTasksView.ts`,
+  `src/googleApi/ListAllTasks.ts` (new `getScheduleTasks`), `styles.css`.
+- fix: changing the refresh interval in settings now restarts the poll timer of open
+  schedule views instead of only applying on reopen.
+
 ## 1.6.0 — 2026-07-21
 
 - feat: add "Tasks Schedule" view — an agenda of open tasks bucketed by day

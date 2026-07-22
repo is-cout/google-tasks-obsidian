@@ -201,6 +201,44 @@ export async function getAllUncompletedTasksOrderdByDue(
 	return [...tasks, ...unTimedTasks];
 }
 
+/**
+ * Tasks for one schedule view: only the selected task lists (empty = all of them),
+ * completed tasks only when asked for, ordered by due date with the undated ones last.
+ * Google hides completed tasks by default, so `showHidden` has to be on to get them.
+ */
+export async function getScheduleTasks(
+	plugin: GoogleTasks,
+	listIds: string[] = [],
+	includeCompleted = false
+): Promise<Task[]> {
+	const taskLists = (await getAllTaskLists(plugin)).filter(
+		(taskList) => !listIds.length || listIds.includes(taskList.id)
+	);
+
+	plugin.showHidden = includeCompleted;
+
+	let tasks: Task[] = [];
+	for (const taskList of taskLists) {
+		const listTasks = await getAllTasksFromList(plugin, taskList.id);
+		listTasks.forEach((task) => (task.taskListName = taskList.title));
+		tasks = [...tasks, ...listTasks];
+	}
+
+	if (!includeCompleted) {
+		tasks = tasks.filter((task) => !task.completed);
+	}
+
+	const unTimedTasks = tasks.filter((task) => !task.due);
+	tasks = tasks
+		.filter((task) => task.due)
+		.sort(
+			(taskA, taskB) =>
+				new Date(taskA.due).valueOf() - new Date(taskB.due).valueOf()
+		);
+
+	return [...tasks, ...unTimedTasks];
+}
+
 export const groupBy = function groupByArray(
 	taskList: Task[]
 ): TreeMap<string, Task[]> {

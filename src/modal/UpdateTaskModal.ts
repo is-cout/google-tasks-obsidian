@@ -1,7 +1,7 @@
 import { DropdownComponent, Modal, Setting, moment } from "obsidian";
 import { customSetting } from "../helper/CustomSettingElement";
 import type GoogleTasks from "../GoogleTasksPlugin";
-import { getListId } from "../view/GoogleTaskView";
+import { getListId } from "../helper/TaskListId";
 import { getAllTaskLists } from "../googleApi/ListAllTasks";
 import type { Task } from "../helper/types";
 import { CreateGoogleTaskFromOldTask } from "src/googleApi/GoogleCreateTask";

@@ -1,6 +1,5 @@
 import { getGoogleAuthToken } from "./GoogleAuth";
 import type GoogleTasks from "../GoogleTasksPlugin";
-import { GoogleTaskView, VIEW_TYPE_GOOGLE_TASK } from "../view/GoogleTaskView";
 import type { Task, TaskInput } from "../helper/types";
 import { createNotice } from "src/helper/NoticeHelper";
 
@@ -41,14 +40,6 @@ export async function CreateGoogleTask(
 				task.due = window.moment(task.due).add(12, "hour").toISOString();
 			}
 			
-			plugin.app.workspace
-				.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK)
-				.forEach((leaf) => {
-					if (leaf.view instanceof GoogleTaskView) {
-						leaf.view.addTodo(task);
-						leaf.view.loadTaskView();
-					}
-				});
 			plugin.refreshScheduleViews();
 			return task;
 		}
@@ -89,13 +80,6 @@ export async function CreateGoogleTaskFromOldTask(
 			createNotice(plugin, "Task updated");
 			await response.json();
 
-			plugin.app.workspace
-				.getLeavesOfType(VIEW_TYPE_GOOGLE_TASK)
-				.forEach((leaf) => {
-					if (leaf.view instanceof GoogleTaskView) {
-						leaf.view.onOpen();
-					}
-				});
 			plugin.refreshScheduleViews();
 		}
 	} catch (error) {
