@@ -1,10 +1,34 @@
-# Obsidian Google Tasks
+# Obsidian Google Tasks (fork)
 
 Manage your Google Tasks from inside Obsidian
 
+> **This is a fork of [YukiGasai/obsidian-google-tasks](https://github.com/YukiGasai/obsidian-google-tasks).**
+> All the original work and credit belong to [@YukiGasai](https://github.com/YukiGasai) and the
+> upstream contributors. This fork keeps the upstream plugin's behaviour and adds a schedule
+> view plus a few fixes on top of it — see [What's different in this fork](#whats-different-in-this-fork)
+> and [CHANGELOG.md](CHANGELOG.md).
 
-# Please make sure to install the latest version of this plugin (at least 1.5.0) to prevent a potential corruption of your attachments (Sorry 🙇‍♂️) Thank you to @carlosrusso. 
+> Please make sure to install at least version 1.5.0 (upstream) to prevent a potential corruption of your attachments (Sorry 🙇‍♂️). Thank you to @carlosrusso.
 
+## What's different in this fork
+
+Added on top of upstream:
+
+-   **Tasks Schedule view** — an agenda of tasks bucketed by day (Overdue / Today / Tomorrow /
+    upcoming days / No due date) with status dots, inline complete and click-to-edit
+-   **Per-view task list filter** — pick which Google task lists a schedule view shows, and open
+    several schedule views side by side, each on its own lists
+-   **Show/hide completed tasks per schedule view**
+-   **Collapsible day heading** in the schedule view, persisted across reopen
+-   Fix: editing a task's due date now persists (upstream sent a date the API silently ignored)
+-   Fix: changing a task's list in the edit modal is now applied
+-   Build copies `main.js` / `manifest.json` / `styles.css` straight into a vault plugin folder
+    (`OBSIDIAN_PLUGIN_DIR` in a gitignored `.env.local`)
+
+Removed compared to upstream:
+
+-   The legacy "Google Tasks" list view and its ribbon icon (as of 2.0.0) — the schedule view
+    replaces it and inherits its checkmark icon
 
 ## Features
 
@@ -20,7 +44,7 @@ Manage your Google Tasks from inside Obsidian
 
 ## Installation
 
--   Download google-tasks from the latest [release](https://github.com/YukiGasai/obsidian-google-tasks/releases/)
+-   Download google-tasks from the latest [release of this fork](https://github.com/is-cout/google-tasks-obsidian/releases/) (the upstream releases are [here](https://github.com/YukiGasai/obsidian-google-tasks/releases/))
 -   Extract zip into `.obsidian/plugins` folder
 -   Restart Obsidian
 -   Activate inside the obsidian settings page

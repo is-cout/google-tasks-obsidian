@@ -12,6 +12,9 @@ Running log of what this fork diverged from upstream `obsidian-google-tasks`.
   after the copy succeeds. Files: `src/modal/UpdateTaskModal.ts`,
   `src/googleApi/GoogleCreateTask.ts` (`CreateGoogleTaskFromOldTask` now returns a
   success boolean).
+- docs: README now states this is a fork of upstream `obsidian-google-tasks`, credits
+  @YukiGasai, lists what this fork adds/removes, and points downloads at this fork's
+  releases. Files: `README.md`.
 
 ## 2.0.0 — 2026-07-22
 
