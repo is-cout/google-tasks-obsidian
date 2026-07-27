@@ -2,6 +2,17 @@
 
 Running log of what this fork diverged from upstream `obsidian-google-tasks`.
 
+## 2.0.1 — 2026-07-27
+
+- fix: changing a task's list/category in the edit modal is now applied. The modal had
+  two buttons — "Update" (PATCH, which the Google Tasks API cannot use to move a task
+  between lists) and "Update Categorie" — so editing the dropdown and pressing "Update"
+  silently dropped the list change. There is now a single "Update" button that detects a
+  list change and re-creates the task in the target list, deleting the original only
+  after the copy succeeds. Files: `src/modal/UpdateTaskModal.ts`,
+  `src/googleApi/GoogleCreateTask.ts` (`CreateGoogleTaskFromOldTask` now returns a
+  success boolean).
+
 ## 2.0.0 — 2026-07-22
 
 - **breaking**: removed the legacy "Google Tasks" list view and its ribbon icon. The

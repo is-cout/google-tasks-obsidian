@@ -12,12 +12,14 @@ export class UpdateTaskModal extends Modal {
 	plugin: GoogleTasks;
 	newTask: Task;
 	oldTaskSelfLInk: string;
+	oldListId: string;
 
 	constructor(plugin: GoogleTasks, task: Task) {
 		super(plugin.app);
 		this.plugin = plugin;
 		this.newTask = task;
 		this.oldTaskSelfLInk = task.selfLink;
+		this.oldListId = getListId(task);
 	}
 	async onOpen() {
 		const taskList = await getAllTaskLists(this.plugin);
@@ -82,19 +84,30 @@ export class UpdateTaskModal extends Modal {
 		const buttonContainer = contentEl.createDiv({cls:"googleButtonContainer"});
 
 		new Setting(buttonContainer).addButton((button) =>
-			button.setButtonText("Update Categorie").onClick(() => {
-				CreateGoogleTaskFromOldTask(this.plugin, this.newTask);
-				DeleteGoogleTask(this.plugin, this.oldTaskSelfLInk, false);
+			button.setButtonText("Update").onClick(async () => {
 				this.close();
+				// The Google Tasks API cannot move a task between lists with a PATCH,
+				// so a list change has to be re-created in the target list and the
+				// original deleted. Only delete once the copy exists.
+				if (this.newTask.parent !== this.oldListId) {
+					const created = await CreateGoogleTaskFromOldTask(
+						this.plugin,
+						this.newTask
+					);
+					if (created) {
+						await DeleteGoogleTask(
+							this.plugin,
+							this.oldTaskSelfLInk,
+							false
+						);
+						this.plugin.refreshScheduleViews();
+					}
+					return;
+				}
+
+				await UpdateGoogleTask(this.plugin, this.newTask);
 			})
 		);
-
-		new Setting(buttonContainer).addButton((button) =>
-		button.setButtonText("Update").onClick(() => {
-			UpdateGoogleTask(this.plugin, this.newTask)
-			this.close();
-		})
-	);
 	}
 	onClose() {
 		const { contentEl } = this;
